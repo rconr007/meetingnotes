@@ -1,0 +1,159 @@
+<div class="super-notes">
+  <nav class="sidebar">
+    <ul>
+      <li class="active"><span class="material-icons">description</span> All Notes</li>
+      <li><span class="material-icons">notifications</span> Notifications</li>
+      <li><span class="material-icons">settings</span> Settings</li>
+      <li><span class="material-icons">local_offer</span> All Tags</li>
+      <li><span class="material-icons">help</span> Help & Support</li>
+      <li><span class="material-icons">delete</span> Trash</li>
+    </ul>
+    <div class="categories">
+      <h3>CATEGORIES <button class="edit-btn" (click)="toggleEditCategories()">EDIT</button></h3>
+      <ul>
+        <li [class.active]="selectedCategory() === null" (click)="selectCategory(null)">All Categories</li>
+        @for (category of categories(); track category.name) {
+          <li [class.active]="selectedCategory() === category.name" (click)="selectCategory(category.name)">
+            <span class="category-color" [style.background-color]="category.color"></span>
+            {{ category.name }}
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="tags">
+      <h3>TAGS</h3>
+      <ul>
+        <li [class.active]="selectedTag() === null" (click)="selectTag(null)">#All</li>
+        @for (tag of allTags(); track tag) {
+          <li [class.active]="selectedTag() === tag" (click)="selectTag(tag)">#{{ tag }}</li>
+        }
+      </ul>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <div class="notes-list">
+      <header>
+        <h2>All Notes</h2>
+        <div class="actions">
+          <button class="icon-btn" (click)="createNewNote()"><span class="material-icons">add</span></button>
+          <button class="icon-btn"><span class="material-icons">folder</span></button>
+        </div>
+      </header>
+      <div class="search-bar">
+        <span class="material-icons">search</span>
+        <input type="text" placeholder="Search all notes and tags"
+               [ngModel]="searchTerm()"
+               (ngModelChange)="updateSearchTerm($event)">
+      </div>
+      <div class="notes">
+        @for (note of filteredNotes(); track note.id) {
+          <div class="note"
+               [class.active]="note.id === selectedNoteId()"
+               (click)="selectNote(note.id)">
+            <div class="note-header">
+              <span class="category-circle" [style.background-color]="getCategoryColor(note.category)"></span>
+              <h3>{{ note.title }}</h3>
+            </div>
+            <p>{{ note.content.substring(0, 50) }}...</p>
+            <div class="note-tags">
+              @for (tag of note.tags; track tag) {
+                <span class="tag">#{{ tag }}</span>
+              }
+            </div>
+            <span class="date">{{ note.date }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="note-content">
+      @if (selectedNote()) {
+        <header>
+          <h1>{{ selectedNote()?.title }}</h1>
+          <div class="actions">
+            @if (isEditing()) {
+              <button class="icon-btn" (click)="saveNote(selectedNote()!)"><span class="material-icons">save</span></button>
+              <button class="icon-btn" (click)="cancelEditing()"><span class="material-icons">cancel</span></button>
+            } @else {
+              <button class="icon-btn" (click)="startEditing()"><span class="material-icons">edit</span></button>
+            }
+            <button class="icon-btn"><span class="material-icons">more_horiz</span></button>
+            <button class="icon-btn"><span class="material-icons">view_agenda</span></button>
+            <button class="icon-btn"><span class="material-icons">info</span></button>
+            <button class="user-btn">S</button>
+          </div>
+        </header>
+        <div class="content">
+          @if (isEditing()) {
+            <div class="category-select">
+              <label for="category-select">Category:</label>
+              <select id="category-select" [(ngModel)]="selectedNote()!.category">
+                <option [ngValue]="undefined">No Category</option>
+                @for (category of categories(); track category.name) {
+                  <option [ngValue]="category.name">{{ category.name }}</option>
+                }
+              </select>
+            </div>
+            <textarea [(ngModel)]="selectedNote()!.content" placeholder="Note content"></textarea>
+            <div class="image-upload">
+              <label for="image-input" class="icon-btn">
+                <span class="material-icons">add_photo_alternate</span>
+              </label>
+              <input id="image-input" type="file" accept="image/*" (change)="addImage(selectedNote()!, $event)" style="display: none;">
+            </div>
+            <div class="tag-input">
+              <input #tagInput type="text" placeholder="Add a tag">
+              <button (click)="addTag(selectedNote()!, tagInput.value); tagInput.value = ''">Add Tag</button>
+            </div>
+          } @else {
+            <p>{{ selectedNote()?.content }}</p>
+          }
+          <div class="image-gallery">
+            @for (image of selectedNote()!.images; track $index) {
+              <div class="image-container">
+                <img [src]="image" alt="Note image">
+                @if (isEditing()) {
+                  <button class="remove-image" (click)="removeImage(selectedNote()!, $index)">
+                    <span class="material-icons">close</span>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+          @if (selectedNote()!.category) {
+            <div class="note-category">
+              <span class="category-circle" [style.background-color]="getCategoryColor(selectedNote()!.category)"></span>
+              {{ selectedNote()!.category }}
+            </div>
+          }
+          <div class="note-tags">
+            @for (tag of selectedNote()!.tags; track tag) {
+              <span class="tag">
+                #{{ tag }}
+                @if (isEditing()) {
+                  <button class="remove-tag" (click)="removeTag(selectedNote()!, tag)">
+                    <span class="material-icons">close</span>
+                  </button>
+                }
+              </span>
+            }
+          </div>
+        </div>
+        <footer>
+          <div class="actions">
+            <button class="icon-btn"><span class="material-icons">push_pin</span></button>
+            <button class="icon-btn"><span class="material-icons">code</span></button>
+            <button class="icon-btn"><span class="material-icons">publish</span></button>
+            <button class="icon-btn"><span class="material-icons">history</span></button>
+          </div>
+          <div class="actions">
+            <button class="icon-btn"><span class="material-icons">content_copy</span></button>
+            <button class="icon-btn"><span class="material-icons">group</span></button>
+            <button class="icon-btn"><span class="material-icons">delete</span></button>
+          </div>
+        </footer>
+      }
+    </div>
+  </div>
+</div>

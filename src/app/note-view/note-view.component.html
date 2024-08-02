@@ -1,0 +1,39 @@
+<div #content class="content">
+  <div class="fixed-content">
+    @if (note.category) {
+      <div class="note-category">
+        <span class="category-circle" [style.background-color]="getCategoryColor(note.category)"></span>
+        {{ note.category }}
+      </div>
+    }
+    <div class="note-tags">
+      @for (tag of note.tags; track tag) {
+        <span class="tag">#{{ tag }}</span>
+      }
+    </div>
+    <div class="image-gallery">
+      @for (image of note.images; track $index) {
+        <div class="image-container">
+          <img [src]="image" alt="Note image">
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="reminders-section">
+    <h3>Reminders</h3>
+    @if (note.reminders && note.reminders.length > 0) {
+      <ul class="reminders-list">
+        @for (reminder of note.reminders; track reminder.id) {
+          <li>
+            {{ reminder.text }} - {{ reminder.dateTime | date:'medium' }}
+          </li>
+        }
+      </ul>
+    } @else {
+      <p>No reminders set for this note.</p>
+    }
+  </div>
+
+  <div #noteContent class="note-content" [innerHTML]="getSafeHtml(note.content)"></div>
+</div>

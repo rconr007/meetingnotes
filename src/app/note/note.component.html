@@ -1,0 +1,13 @@
+<div class="note" [class.active]="isSelected">
+  <div class="note-header">
+    <span class="category-circle" [style.background-color]="getCategoryColor(note.category)"></span>
+    <h3> * {{ note.title }}</h3>
+  </div>
+  <p>{{ getSanitizedContent() }}</p>
+  <div class="note-tags">
+    @for (tag of note.tags; track tag) {
+      <span class="tag">#{{ tag }}</span>
+    }
+  </div>
+  <span class="date">{{ note.date }}</span>
+</div>

@@ -1,0 +1,40 @@
+<div class="notes-list">
+  <header>
+    <h2>All Notes</h2>
+    <div class="actions">
+      <button class="icon-btn" (click)="createNewNote()"><span class="material-icons">add</span></button>
+      <button class="icon-btn"><span class="material-icons">folder</span></button>
+    </div>
+  </header>
+  <div class="search-bar">
+    <span class="material-icons">search</span>
+    <input type="text" placeholder="Search all notes and tags"
+           [ngModel]="service.searchTerm()"
+           (ngModelChange)="updateSearchTerm($event)">
+  </div>
+
+  <div class="notes">
+    @for (note of service.filteredNotes(); track note.id) {
+      <div class="note"
+           [class.active]="note.id === service.selectedNoteId()"
+           (click)="selectNote(note.id)">
+        <div class="note-header">
+          <span class="category-circle" [style.backgroundColor]="getCategoryColor(note.category)"></span>
+          <h3>{{ note.title }}</h3>
+          @if (note.reminders && note.reminders.length > 0) {
+            <span class="reminder-indicator">🔔</span>
+          }
+        </div>
+        <p>{{ getSanitizedContent(note.content) }}</p>
+        <div class="note-tags">
+          @for (tag of note.tags; track tag) {
+            <span class="tag">#{{ tag }}</span>
+          }
+        </div>
+        <span class="date">{{ note.date | date:'short' }}</span>
+      </div>
+    }
+  </div>
+
+
+</div>

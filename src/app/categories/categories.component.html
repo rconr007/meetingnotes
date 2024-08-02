@@ -1,0 +1,29 @@
+<div class="categories">
+  <h3>CATEGORIES <button class="edit-btn" (click)="toggleEditCategories()">{{ isEditing ? 'DONE' : 'EDIT' }}</button></h3>
+  <div class="category-list">
+    <ul>
+      @for (category of categories(); track category.name) {
+        <li [class.active]="selectedCategory() === (category.name === 'All Categories' ? null : category.name)"
+            (click)="selectCategory(category.name === 'All Categories' ? null : category.name)">
+          <span class="category-color" [style.background-color]="getCategoryColor(category.name)"></span>
+          {{ category.name }}
+          @if (isEditing && category.name !== 'All Categories') {
+            <button class="remove-category" (click)="removeCategory(category.name); $event.stopPropagation()">×</button>
+          }
+        </li>
+      }
+    </ul>
+  </div>
+  @if (isEditing) {
+    <div class="add-category">
+      <label class="color-picker">
+        <input #newCategoryColor type="color" (input)="updateColorPickerBackground(newCategoryColor)">
+      </label>
+      <input #newCategoryName type="text" placeholder="New category name">
+      <button [disabled]="!isValidNewCategory(newCategoryName.value, newCategoryColor.value)"
+              (click)="addCategory(newCategoryName.value, newCategoryColor.value); newCategoryName.value = ''; resetColorPicker(newCategoryColor)">
+        Add
+      </button>
+    </div>
+  }
+</div>

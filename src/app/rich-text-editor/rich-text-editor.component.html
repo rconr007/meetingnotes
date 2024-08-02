@@ -1,0 +1,139 @@
+<div class="rich-text-editor" [class.expanded]="isExpanded">
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <button
+        (click)="formatText('bold')"
+        [class.active]="isStyleActive('bold')"
+        title="Bold"
+      >
+        <span class="material-icons">format_bold</span>
+      </button>
+      <button
+        (click)="formatText('italic')"
+        [class.active]="isStyleActive('italic')"
+        title="Italic"
+      >
+        <span class="material-icons">format_italic</span>
+      </button>
+      <button
+        (click)="formatText('underline')"
+        [class.active]="isStyleActive('underline')"
+        title="Underline"
+      >
+        <span class="material-icons">format_underlined</span>
+      </button>
+      <button
+        (click)="formatText('strikeThrough')"
+        [class.active]="isStyleActive('strikeThrough')"
+        title="Strikethrough"
+      >
+        <span class="material-icons">strikethrough_s</span>
+      </button>
+      <button
+        (click)="formatText('justifyLeft')"
+        [class.active]="isStyleActive('justifyLeft')"
+        title="Align Left"
+      >
+        <span class="material-icons">format_align_left</span>
+      </button>
+      <button
+        (click)="formatText('justifyCenter')"
+        [class.active]="isStyleActive('justifyCenter')"
+        title="Align Center"
+      >
+        <span class="material-icons">format_align_center</span>
+      </button>
+      <button
+        (click)="formatText('justifyRight')"
+        [class.active]="isStyleActive('justifyRight')"
+        title="Align Right"
+      >
+        <span class="material-icons">format_align_right</span>
+      </button>
+      <button
+        (click)="formatText('justifyFull')"
+        [class.active]="isStyleActive('justifyFull')"
+        title="Justify"
+      >
+        <span class="material-icons">format_align_justify</span>
+      </button>
+      <button
+        (click)="formatText('insertUnorderedList')"
+        [class.active]="isStyleActive('insertUnorderedList')"
+        title="Bullet List"
+      >
+        <span class="material-icons">format_list_bulleted</span>
+      </button>
+      <button
+        (click)="formatText('insertOrderedList')"
+        [class.active]="isStyleActive('insertOrderedList')"
+        title="Numbered List"
+      >
+        <span class="material-icons">format_list_numbered</span>
+      </button>
+      <button (click)="insertLink()" title="Insert Link">
+        <span class="material-icons">link</span>
+      </button>
+      <button (click)="insertTable()" title="Insert Table">
+        <span class="material-icons">table_chart</span>
+      </button>
+      <button (click)="insertRow()" title="Insert Row">
+        <span class="material-icons">add_box</span>
+      </button>
+      <button (click)="deleteRow()" title="Delete Row">
+        <span class="material-icons">remove</span>
+      </button>
+      <button (click)="insertColumn()" title="Insert Column">
+        <span class="material-icons">view_column</span>
+      </button>
+      <button (click)="deleteColumn()" title="Delete Column">
+        <span class="material-icons">view_stream</span>
+      </button>
+      <label for="image-input" class="image-upload-btn" title="Insert Image">
+        <span class="material-icons">image</span>
+        <input
+          id="image-input"
+          type="file"
+          accept="image/*"
+          (change)="insertImage($event)"
+          style="display: none"
+        />
+      </label>
+      <button (click)="insertDate()" title="Insert Date">
+        <span class="material-icons">event</span>
+      </button>
+      <button (click)="insertTime()" title="Insert Time">
+        <span class="material-icons">schedule</span>
+      </button>
+
+      <button (click)="insertReminder()" title="Set Reminder">
+        <span class="material-icons">notification_add</span>
+      </button>
+    </div>
+    <div class="toolbar-right">
+      <button (click)="toggleExpand()" class="expand-button">
+        <span class="material-icons">{{
+          isExpanded ? "fullscreen_exit" : "fullscreen"
+        }}</span>
+      </button>
+    </div>
+  </div>
+  <div class="editor" #editor contenteditable="true"></div>
+</div>
+
+<dialog #reminderDialog>
+  <h2>Set Reminder</h2>
+  <form (ngSubmit)="setReminder()">
+    <label for="reminderDate">Date:</label>
+    <input type="date" id="reminderDate" [(ngModel)]="reminderDate" name="reminderDate" required>
+
+    <label for="reminderTime">Time:</label>
+    <input type="time" id="reminderTime" [(ngModel)]="reminderTime" name="reminderTime" required>
+
+    <label for="reminderText">Reminder Text:</label>
+    <input type="text" id="reminderText" [(ngModel)]="reminderText" name="reminderText" required>
+
+    <button type="submit">Set Reminder</button>
+    <button type="button" (click)="closeReminderDialog()">Cancel</button>
+  </form>
+</dialog>

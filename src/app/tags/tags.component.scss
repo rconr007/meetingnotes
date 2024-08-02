@@ -1,0 +1,141 @@
+.tags {
+  display: flex;
+  flex-direction: column;
+  height: 100%; // Ensure it takes full height of its container
+  padding: 10px;
+  overflow: hidden; // Prevent scrollbar on the main container
+}
+
+h3 {
+  font-size: 12px;
+  color: #888;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  flex-shrink: 0; // Prevent shrinking
+}
+
+.tags-list {
+  flex-grow: 1; // Take up available space
+  overflow-y: auto; // Make only this section scrollable
+  margin-bottom: 10px;
+
+  // Custom scrollbar styles
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #1e1e1e;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:hover {
+    background-color: #3a3a3a;
+  }
+
+  &.active {
+    background-color: #4a4a4a;
+  }
+
+  .tag-name {
+    flex-grow: 1;
+  }
+
+  .remove-tag {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 5px;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.new-tag-form {
+  display: flex;
+  margin-top: 10px;
+  flex-shrink: 0; // Prevent shrinking
+
+  input {
+    flex-grow: 1;
+    background-color: #3c3c3c;
+    border: none;
+    padding: 8px;
+    color: #fff;
+    border-radius: 4px 0 0 4px;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #5c5c5c;
+    }
+  }
+
+  button {
+    background-color: #4a4a4a;
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #5a5a5a;
+    }
+
+    &:active {
+      background-color: #3a3a3a;
+    }
+  }
+}
+
+.tag-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  flex-shrink: 0; // Prevent shrinking
+
+  button {
+    background-color: #3c3c3c;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #4a4a4a;
+    }
+  }
+}

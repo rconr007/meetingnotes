@@ -1,0 +1,91 @@
+<div class="client-management">
+  <nav class="sidebar">
+    <ul>
+      <li><button>Q</button></li>
+      <li><button class="add-button" (click)="toggleNewNoteForm()">+</button></li>
+      <li><button>⌂</button></li>
+      <li><button>☆</button></li>
+      <li><button>□</button></li>
+      <li><button>⊞</button></li>
+      <li><button>👥</button></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+    <header>
+      <h1>Clients</h1>
+      <span>{{ notes().length }} notes</span>
+      <div class="actions">
+        <button>▼</button>
+        <button>≡</button>
+        <button>☷</button>
+        <button (click)="toggleNewNoteForm()">+</button>
+      </div>
+    </header>
+
+    @if (showNewNoteForm()) {
+      <div class="new-note-form">
+        <input [(ngModel)]="newNote().title" placeholder="Note Title">
+        <textarea [(ngModel)]="newNote().content" placeholder="Note Content"></textarea>
+        <button (click)="addNewNote()">Save Note</button>
+        <button (click)="toggleNewNoteForm()">Cancel</button>
+      </div>
+    }
+
+    <div class="notes-grid">
+      @for (note of notes(); track note.id) {
+        <div class="note"
+             [class.selected]="note.id === selectedNoteId()"
+             (click)="selectNote(note.id)">
+          <h3>{{ note.title }}</h3>
+          <p [innerHTML]="note.content"></p>
+          @if (note.date) {
+            <span class="date">{{ note.date }}</span>
+          }
+          @if (note.image) {
+            <img [src]="note.image" [alt]="note.title">
+          }
+        </div>
+      }
+    </div>
+  </main>
+
+  <aside class="meeting-notes" *ngIf="selectedNote()">
+    <header>
+      <h2>{{ selectedNote()?.title }}</h2>
+      <span>Last edited 15 minutes ago</span>
+      <button class="share-button">Share</button>
+    </header>
+
+    <div class="meeting-details">
+      <h3>Date/Time</h3>
+      <p>{{ selectedNote()?.details?.dateTime }}</p>
+
+      <h3>Action Items</h3>
+      <h4>Phase 1</h4>
+      <ul>
+        @for (item of selectedNote()?.details?.actionItems; track item.text) {
+          <li>
+            <input type="checkbox" [checked]="item.done"> {{ item.text }}
+          </li>
+        }
+      </ul>
+
+      <h3>Client preferences</h3>
+      <ul>
+        @for (pref of selectedNote()?.details?.clientPreferences; track pref) {
+          <li>{{ pref }}</li>
+        }
+      </ul>
+
+      <div class="attachments">
+        @for (attachment of selectedNote()?.details?.attachments; track attachment.name) {
+          <div>{{ attachment.name }} {{ attachment.size }}</div>
+        }
+      </div>
+
+      <h3>From client:</h3>
+      <img src="path-to-client-image.jpg" alt="Client's image">
+    </div>
+  </aside>
+</div>

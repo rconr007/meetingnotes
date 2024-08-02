@@ -1,0 +1,107 @@
+<div class="content">
+  <div class="note-metadata">
+    <!-- New title input field -->
+    <input
+      class="note-title"
+      type="text"
+      [(ngModel)]="note.title"
+      (ngModelChange)="onTitleChange($event)"
+      placeholder="Note Title"
+    >
+
+    <div class="metadata-item category-and-image">
+      <div class="category">
+        <label for="category-select">Category:</label>
+        <div class="custom-select">
+          <div class="selected-option" (click)="toggleCategoryDropdown()">
+            <span class="category-color" [style.backgroundColor]="getCategoryColor(note.category)"></span>
+            {{ note.category || 'No Category' }}
+          </div>
+          <ul class="options" [class.show]="isCategoryDropdownOpen">
+            @for (category of categories(); track category.name) {
+              <li (click)="selectCategory(category.name)">
+                <span class="category-color" [style.backgroundColor]="category.color"></span>
+                {{ category.name }}
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="metadata-item tags">
+      <label>Tag(s):</label>
+      <ul>
+        @for (tag of availableTags(); track tag) {
+          <li>
+            <label>
+              <input type="checkbox"
+                     [checked]="tag === 'All' ? isAllTagsSelected() : note.tags.includes(tag)"
+                     (change)="toggleTag(tag)">
+              {{ tag }}
+            </label>
+          </li>
+        }
+      </ul>
+      <div class="add-tag">
+        <input type="text" [(ngModel)]="newTagName" placeholder="New tag name">
+        <button (click)="addNewTag()">Add</button>
+      </div>
+      <div class="note-tags" style="margin-top: 15px;">
+        @for (tag of note.tags; track tag) {
+          <span class="tag">
+            #{{ tag }}
+            <button class="remove-tag" (click)="removeTag(tag)">
+              <span class="material-icons">close</span>
+            </button>
+          </span>
+        }
+      </div>
+    </div>
+
+    <div>
+      <div class="add-image">
+
+        <label for="image-input" class="image-upload-btn" title="Add Image">
+          <span class="image-caption">Images: </span>
+          <span class="material-icons">add_photo_alternate</span>
+          <input id="image-input" type="file" accept="image/*" (change)="addImage($event)" style="display: none;">
+        </label>
+      </div>
+      <div class="image-gallery">
+        @for (image of note.images; track $index) {
+          <div class="image-container">
+            <img [src]="image" alt="Note image">
+            <button class="remove-image" (click)="removeImage($index)">
+              <span class="material-icons">close</span>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="reminders-section">
+    <h3>Reminders</h3>
+    @if (note.reminders && note.reminders.length > 0) {
+      <ul class="reminders-list">
+        @for (reminder of note.reminders; track reminder.id) {
+          <li>
+            {{ reminder.text }} - {{ reminder.dateTime | date:'medium' }}
+            <button (click)="removeReminder(reminder.id)">Remove</button>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p>No reminders set for this note.</p>
+    }
+    <button (click)="openReminderDialog()">Add Reminder</button>
+  </div>
+
+  <app-rich-text-editor
+  [noteId]="note.id"
+  [content]="note.content"
+  (contentChange)="onContentChange($event)"
+  (imageInserted)="onImageInsertedWrapper($event)">
+</app-rich-text-editor>
+</div>

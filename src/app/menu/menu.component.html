@@ -1,0 +1,8 @@
+<ul>
+  @for (item of menuItems; track item.text) {
+    <li [class.active]="item.active">
+      <span class="material-icons">{{ item.icon }}</span>
+      {{ item.text }}
+    </li>
+  }
+</ul>

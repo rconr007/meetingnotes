@@ -1,0 +1,23 @@
+<div class="tags">
+  <h3>TAGS</h3>
+  <div class="tags-list">
+    <ul>
+      @for (tag of allTags(); track tag) {
+        <li [class.active]="selectedTag() === tag" (click)="selectTag(tag)">
+          <span class="tag-name">#{{ tag }}</span>
+          @if (isEditing && tag !== 'All') {
+            <button class="remove-tag" (click)="removeTag(tag, $event)">×</button>
+          }
+        </li>
+      }
+    </ul>
+  </div>
+  <div class="new-tag-form">
+    <input type="text" [(ngModel)]="newTagName" placeholder="New tag name">
+    <button (click)="addNewTag()">Add</button>
+  </div>
+  <div class="tag-actions">
+    <button (click)="toggleEditMode()">{{ isEditing ? 'Done' : 'Edit Tags' }}</button>
+    <button (click)="clearAllTags()">Clear All</button>
+  </div>
+</div>

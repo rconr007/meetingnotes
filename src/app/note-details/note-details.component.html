@@ -1,0 +1,28 @@
+<div class="note-content">
+  @if (selectedNote(); as note) {
+    <header>
+      <h1>{{ note.title }}</h1>
+      <div class="actions">
+        @if (isEditing()) {
+          <button class="icon-btn" (click)="saveNote(note)"><span class="material-icons">save</span></button>
+          <button class="icon-btn" (click)="cancelEditing()"><span class="material-icons">cancel</span></button>
+        } @else {
+          <button class="icon-btn" (click)="startEditing()"><span class="material-icons">edit</span></button>
+        }
+        <button class="icon-btn"><span class="material-icons">more_horiz</span></button>
+        <button class="icon-btn"><span class="material-icons">view_agenda</span></button>
+        <button class="icon-btn"><span class="material-icons">info</span></button>
+        <button class="user-btn">S</button>
+      </div>
+    </header>
+    @if (isEditing()) {
+      <app-note-edit [note]="note"></app-note-edit>
+    } @else {
+      <app-note-view [note]="note"></app-note-view>
+    }
+  } @else {
+    <div class="no-note-selected">
+      <p>No note selected</p>
+    </div>
+  }
+</div>

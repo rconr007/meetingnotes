@@ -1,0 +1,30 @@
+:host {
+  display: block;
+  padding: 10px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  padding: 8px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+}
+
+li:hover {
+  background-color: #2a2d2e;
+}
+
+li.active {
+  background-color: #37373d;
+}
+
+.material-icons {
+  margin-right: 10px;
+}
